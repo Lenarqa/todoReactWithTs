@@ -17,11 +17,27 @@ const App: React.FC = () => {
     setTodos((prev) => [newTodo, ...prev]);
   };
 
-  const toggleHandler = (id: number) => {};
+  const toggleHandler = (id: number) => {
+    console.log("toggleHandler");
+    
+    setTodos((prev) => 
+      prev.map((todo) => {
+        if(todo.id === id) {
+          return {
+            ...todo,
+            completed:!todo.completed,
+          }
+        }
+        return todo;
+      })
+    );
+  };
 
   const removeHandler = (id: number) => {
-    console.log(id);
-    
+    const shouldRemove = window.confirm("Вы уверены что хотите удалить элемент?");
+    if(shouldRemove){
+      setTodos((prev) => prev.filter((todo) => todo.id !== id));
+    }
   };
 
   return (
@@ -29,7 +45,11 @@ const App: React.FC = () => {
       <Navbar />
       <div className="container">
         <TodoForm onAdd={addTodo} />
-        <TodoList todos={todos} onToggle={toggleHandler} onRemove={removeHandler}/>
+        <TodoList
+          todos={todos}
+          onToggle={toggleHandler}
+          onRemove={removeHandler}
+        />
       </div>
     </>
   );
